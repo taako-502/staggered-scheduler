@@ -1,3 +1,4 @@
+import Login from '@/components/Login'
 import useAxios from '@/hooks/useAxios'
 import { useEffect } from 'react'
 
@@ -15,17 +16,19 @@ export default function Home() {
 
   const axios = useAxios()
   useEffect(() => {
-    axios
-      .post('/query', {
-        query,
-      })
-      .then((res) => {
-        console.log(res)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+    async function getUsers() {
+      try {
+        const users = await axios.post('/query', { query })
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    getUsers()
   }, [])
 
-  return <main>Hello World</main>
+  return (
+    <main>
+      <Login />
+    </main>
+  )
 }
