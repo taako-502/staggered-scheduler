@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from 'axios'
 
 const useAxios = (): AxiosInstance => {
   const instance = axios.create({
-    baseURL: process.env.NEXT_GRAPHQL_URL,
+    baseURL: process.env.NEXT_PUBLIC_GRAPHQL_BASE_URL,
   })
   return instance
 }
