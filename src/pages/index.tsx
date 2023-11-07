@@ -7,7 +7,6 @@ export default function Home() {
       users {
         id
         username
-        passwordHash
         createdAt
         updatedAt
       }
