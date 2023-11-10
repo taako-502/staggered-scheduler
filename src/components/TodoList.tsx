@@ -1,16 +1,44 @@
 import { Todo } from '@/types/todo.type'
 import NewTodo from './NewTodo'
 import useAxios from '@/hooks/useAxios'
+import { useEffect, useState } from 'react'
 
 type Props = {
-  todos: Todo[]
   isActiveNewTodo: boolean
 }
 
 const TodoList = (props: Props) => {
+  const [todos, setTodos] = useState<Todo[]>([])
   const axios = useAxios()
 
-  if (!props.todos || !Array.isArray(props.todos)) return
+  useEffect(() => {
+    const currentUuid = localStorage.getItem('uuid')
+    if (!currentUuid) return
+
+    async function getTodosByUserId() {
+      const query = `
+        query {
+          todosByUserId(userId: "${currentUuid}"){
+            id
+            title
+            description
+            done
+            dueDateTime
+            status
+            createdAt
+            updatedAt
+          }
+        }
+      `
+      try {
+        const result = await axios.post('/query', { query })
+        setTodos(result.data.data.todosByUserId)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    getTodosByUserId()
+  }, [])
 
   // TODO: 型をハードコーディングしない
   const updateStatus = async (id: string, status: 'CREATED' | 'COMPLETED') => {
@@ -33,7 +61,7 @@ const TodoList = (props: Props) => {
   return (
     <div>
       <h1>TodoList</h1>
-      {props.todos.map((todo) => {
+      {todos.map((todo) => {
         return (
           <div key={todo.id}>
             <input
