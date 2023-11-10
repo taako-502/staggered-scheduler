@@ -8,7 +8,9 @@ type Props = {
 const NewTodo = (props: Props) => {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
+  const [dueDateTime, setDueDateTime] = useState('')
   const [uuid, setUuid] = useState('')
+  const [error, setError] = useState('')
   const axios = useAxios()
 
   useEffect(() => {
@@ -21,12 +23,16 @@ const NewTodo = (props: Props) => {
   if (!props.isActiveNewTodo) return
 
   const newTodo = async () => {
+    if (!title || !dueDateTime) {
+      setError('titleとdueDateTimeは必須です')
+      return
+    }
     const query = `
       mutation {
         createTodo(input: {
           title: "${title}"
           description: "${description}"
-          dueDateTime: ""
+          dueDateTime: "${dueDateTime}"
           userId: "${uuid}"
         }) {
           id
@@ -43,22 +49,58 @@ const NewTodo = (props: Props) => {
 
   return (
     <div>
-      <input
-        id="new-todo-title"
-        className="text-black px-2 py-1"
-        type="text"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      />
-      <textarea
-        id="new-todo-description"
-        className="text-black px-2 py-1"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-      />
-      <button id="new-todo-submit" type="submit" onClick={newTodo}>
-        Add
-      </button>
+      <div className="mt-4 flex">
+        <label htmlFor="new-todo-title" className="block w-full max-w-[160px]">
+          Title
+        </label>
+        <input
+          id="new-todo-title"
+          className="w-full text-black px-2 py-1"
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+      </div>
+      <div className="mt-4 flex">
+        <label
+          htmlFor="new-todo-description"
+          className="block w-full max-w-[160px]"
+        >
+          Description
+        </label>
+        <textarea
+          id="new-todo-description"
+          className="w-full text-black px-2 py-1"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+      </div>
+      <div className="mt-4 flex">
+        <label
+          htmlFor="new-todo-due-date-time"
+          className="block w-full max-w-[160px]"
+        >
+          Due Date Time
+        </label>
+        <input
+          id="new-todo-due-date-time"
+          type="datetime-local"
+          className="w-full text-black px-2 py-1"
+          value={dueDateTime}
+          onChange={(e) => setDueDateTime(e.target.value)}
+        />
+      </div>
+      <div className="text-right">
+        <button
+          id="new-todo-submit"
+          className="mt-2 border-2 border-slate-300	border-solid"
+          type="submit"
+          onClick={newTodo}
+        >
+          Add
+        </button>
+      </div>
+      {error && <p className="text-red-500">{error}</p>}
     </div>
   )
 }

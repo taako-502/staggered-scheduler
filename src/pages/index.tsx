@@ -1,5 +1,4 @@
 import TodoList from '@/components/todos/TodoList'
-import useAxios from '@/hooks/useAxios'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
@@ -7,7 +6,6 @@ export default function Home() {
   const [uuid, setUuid] = useState('')
   const [isActiveNewTodo, setIsActiveNewTodo] = useState(false)
 
-  const axios = useAxios()
   useEffect(() => {
     const currentUuid = localStorage.getItem('uuid')
     if (currentUuid) {
