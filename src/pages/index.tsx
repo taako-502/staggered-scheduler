@@ -1,4 +1,4 @@
-import TodoList from '@/components/TodoList'
+import TodoList from '@/components/todos/TodoList'
 import useAxios from '@/hooks/useAxios'
 import { signout } from '@/utility/signout'
 import Link from 'next/link'
