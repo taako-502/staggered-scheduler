@@ -7,6 +7,7 @@ type Props = {
 
 const NewTodo = (props: Props) => {
   const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
   const [uuid, setUuid] = useState('')
   const axios = useAxios()
 
@@ -24,7 +25,7 @@ const NewTodo = (props: Props) => {
       mutation {
         createTodo(input: {
           title: "${title}"
-          description: ""
+          description: "${description}"
           dueDateTime: ""
           userId: "${uuid}"
         }) {
@@ -48,6 +49,12 @@ const NewTodo = (props: Props) => {
         type="text"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
+      />
+      <textarea
+        id="new-todo-description"
+        className="text-black px-2 py-1"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
       />
       <button id="new-todo-submit" type="submit" onClick={newTodo}>
         Add
