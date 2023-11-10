@@ -4,7 +4,7 @@ export type Todo = {
   description: string
   done: boolean
   dueDateTime: string
-  status: string
+  status: 'CREATED' | 'COMPLETED'
   createdAt: string
   updatedAt: string
 }
