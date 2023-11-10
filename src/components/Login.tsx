@@ -2,7 +2,11 @@ import { useState } from 'react'
 import axios from 'axios'
 import useAxios from '@/hooks/useAxios'
 
-const Login = () => {
+type Props = {
+  className: string
+}
+
+const Login = (props: Props) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -42,7 +46,7 @@ const Login = () => {
   }
 
   return (
-    <div>
+    <div className={props.className}>
       <div>
         <h1>Login</h1>
         <label htmlFor="username" className="mr-2">
@@ -57,7 +61,7 @@ const Login = () => {
           onChange={(e) => setUsername(e.target.value)}
         />
       </div>
-      <div>
+      <div className="mt-2">
         <label htmlFor="password" className="mr-2">
           Password
         </label>
@@ -71,7 +75,7 @@ const Login = () => {
         />
       </div>
       <button
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold rounded"
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold rounded block mx-auto mt-2"
         type="button"
         onClick={signin}
       >

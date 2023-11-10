@@ -1,5 +1,6 @@
 import Login from '@/components/Login'
 import useAxios from '@/hooks/useAxios'
+import Link from 'next/link'
 import { useEffect } from 'react'
 
 export default function Home() {
@@ -28,7 +29,7 @@ export default function Home() {
 
   return (
     <main>
-      <Login />
+      <Link href="/signin">SignIN</Link>
     </main>
   )
 }
