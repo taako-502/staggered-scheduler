@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import axios from 'axios'
 import useAxios from '@/hooks/useAxios'
+import { useRouter } from 'next/router'
 
 type Props = {
   className: string
@@ -11,6 +12,7 @@ const Login = (props: Props) => {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const axios = useAxios()
+  const router = useRouter()
 
   const signin = async () => {
     try {
@@ -38,6 +40,9 @@ const Login = (props: Props) => {
         )
       } else {
         setError('')
+        const currentUuid = result.data.data.login.id
+        localStorage.setItem('uuid', currentUuid)
+        router.push('/')
       }
     } catch {
       console.error(error)
