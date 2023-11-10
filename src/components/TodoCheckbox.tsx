@@ -2,23 +2,20 @@ import useAxios from '@/hooks/useAxios'
 
 type Props = {
   id: string
-  status: 'CREATED' | 'COMPLETED'
+  done: boolean
 }
 
 const TodoCheckbox = (props: Props) => {
   const axios = useAxios()
-
-  // TODO: 型をハードコーディングしない
-  // FIXME: チェックボックスに関してはstatusではなくdoneを利用すること
-  const updateStatus = async (id: string, status: 'CREATED' | 'COMPLETED') => {
-    const newStatus = status === 'CREATED' ? 'COMPLETED' : 'CREATED'
+  const updateDone = async (id: string, done: boolean) => {
     const query = `
-    mutation {
-      updateTodoStatus(id: "${id}", status: "${newStatus}") {
-        id
+      mutation {
+        updateTodoDone(id: "${id}", done: ${!done}) {
+          id
+          done
+        }
       }
-    }
-  `
+    `
     try {
       await axios.post('/query', { query })
       window.location.reload()
@@ -30,8 +27,8 @@ const TodoCheckbox = (props: Props) => {
   return (
     <input
       type="checkbox"
-      onChange={() => updateStatus(props.id, props.status)}
-      checked={props.status === 'COMPLETED'}
+      checked={props.done}
+      onChange={() => updateDone(props.id, props.done)}
     />
   )
 }

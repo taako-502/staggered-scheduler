@@ -44,9 +44,11 @@ const TodoList = (props: Props) => {
   return (
     <div>
       <h1>TodoList</h1>
-      {todos.map((todo) => {
-        return <TodoItem key={todo.id} todo={todo} />
-      })}
+      <ul>
+        {todos.map((todo) => {
+          return <TodoItem key={todo.id} todo={todo} />
+        })}
+      </ul>
       <NewTodo isActiveNewTodo={props.isActiveNewTodo} />
     </div>
   )
