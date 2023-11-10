@@ -17,7 +17,7 @@ const TodoItem = (props: Props) => {
       </div>
       <div className="inline-block">
         <div className="grid grid-cols-2">
-          <h2>{props.todo.title}</h2>
+          <h2 className="font-bold text-lg">{props.todo.title}</h2>
           <p className="text-right">{props.todo.dueDateTime}</p>
         </div>
         <p>{props.todo.description}</p>
