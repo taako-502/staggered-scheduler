@@ -1,7 +1,9 @@
 import { Todo } from '@/types/todo.type'
+import NewTodo from './NewTodo'
 
 type Props = {
   todos: Todo[]
+  isActiveNewTodo: boolean
 }
 
 const TodoList = (props: Props) => {
@@ -13,6 +15,7 @@ const TodoList = (props: Props) => {
       {props.todos.map((todo) => {
         return <div key={todo.id}>{todo.title}</div>
       })}
+      <NewTodo isActiveNewTodo={props.isActiveNewTodo} />
     </div>
   )
 }

@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react'
 export default function Home() {
   const [todos, setTodos] = useState<Todo[]>([])
   const [uuid, setUuid] = useState('')
+  const [isActiveNewTodo, setIsActiveNewTodo] = useState(false)
 
   const axios = useAxios()
   useEffect(() => {
@@ -18,10 +19,11 @@ export default function Home() {
       return
     }
 
+    // FIXME: TodoListコンポネントに移動する
     async function getTodosByUserId() {
       const query = `
         query {
-          todosByUserId(userID: "${currentUuid}"){
+          todosByUserId(userId: "${currentUuid}"){
             id
             title
             description
@@ -56,7 +58,14 @@ export default function Home() {
     <main>
       <h1>Schedule List</h1>
       <button onClick={signout}>SignOut</button>
-      <TodoList todos={todos} />
+      <TodoList todos={todos} isActiveNewTodo={isActiveNewTodo} />
+      <button
+        onClick={() => {
+          setIsActiveNewTodo(!isActiveNewTodo)
+        }}
+      >
+        New Schedule
+      </button>
     </main>
   )
 }

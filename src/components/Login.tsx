@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import axios from 'axios'
 import useAxios from '@/hooks/useAxios'
 import { useRouter } from 'next/router'
 
