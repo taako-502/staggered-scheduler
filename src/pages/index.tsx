@@ -1,4 +1,3 @@
-import Login from '@/components/Login'
 import useAxios from '@/hooks/useAxios'
 import { signout } from '@/utility/signout'
 import Link from 'next/link'
