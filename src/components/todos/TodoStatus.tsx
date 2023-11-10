@@ -26,15 +26,12 @@ const TodoStatus = (props: Props) => {
 
   return (
     <select
+      value={props.status}
       className="bg-black"
       onChange={(e) => updateStatus(props.id, e.target.value as TodoStatus)}
     >
-      <option value="CREATED" selected={'CREATED' === props.status}>
-        CREATED
-      </option>
-      <option value="COMPLETED" selected={'COMPLETED' === props.status}>
-        COMPLETED
-      </option>
+      <option value="CREATED">CREATED</option>
+      <option value="COMPLETED">COMPLETED</option>
     </select>
   )
 }

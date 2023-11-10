@@ -43,7 +43,6 @@ const TodoList = (props: Props) => {
 
   return (
     <div>
-      <h1>TodoList</h1>
       <ul>
         {todos.map((todo) => {
           return <TodoItem key={todo.id} todo={todo} />

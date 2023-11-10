@@ -1,6 +1,5 @@
 import TodoList from '@/components/todos/TodoList'
 import useAxios from '@/hooks/useAxios'
-import { signout } from '@/utility/signout'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
@@ -29,8 +28,6 @@ export default function Home() {
 
   return (
     <main>
-      <h1>Schedule List</h1>
-      <button onClick={signout}>SignOut</button>
       <TodoList isActiveNewTodo={isActiveNewTodo} />
       <button
         onClick={() => {
