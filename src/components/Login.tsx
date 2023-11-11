@@ -51,32 +51,40 @@ const Login = (props: Props) => {
 
   return (
     <div className={props.className}>
-      <div>
-        <h1>Login</h1>
-        <label htmlFor="username" className="mr-2">
-          Username
-        </label>
-        <input
-          id="username"
-          type="text"
-          className="text-black px-2 py-1"
-          placeholder="username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-      </div>
-      <div className="mt-2">
-        <label htmlFor="password" className="mr-2">
-          Password
-        </label>
-        <input
-          id="password"
-          type="password"
-          className="text-black px-2 py-1"
-          placeholder="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+      <div className="mx-auto max-w-[320px]">
+        <div>
+          <h1>Login</h1>
+          <label
+            htmlFor="username"
+            className="mr-2 inline-block w-full max-w-[120px]"
+          >
+            Username
+          </label>
+          <input
+            id="username"
+            type="text"
+            className="text-black px-2 py-1"
+            placeholder="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </div>
+        <div className="mt-2">
+          <label
+            htmlFor="password"
+            className="mr-2 inline-block w-full max-w-[120px]"
+          >
+            Password
+          </label>
+          <input
+            id="password"
+            type="password"
+            className="text-black px-2 py-1"
+            placeholder="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
       </div>
       <button
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold rounded block mx-auto mt-2"
