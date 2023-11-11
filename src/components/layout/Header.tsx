@@ -36,7 +36,7 @@ const Header = () => {
           <Image src="/logo.png" alt="logo" width="300" height="30" />
         </Link>
         <div className="text-right">
-          <span>{username}</span>
+          <span className="mr-4">{username}</span>
           <button onClick={signout} className="relative z-40">
             SignOut
           </button>
