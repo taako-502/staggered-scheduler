@@ -19,7 +19,14 @@ export default function Home() {
   if (!uuid) {
     return (
       <main>
-        <Link href="/signin">SignIn</Link>
+        <div className="text-center">
+          <Link
+            href="/signin"
+            className="px-2 py-1 border-dotted border-2 border-slate-300"
+          >
+            SignIn
+          </Link>
+        </div>
       </main>
     )
   }

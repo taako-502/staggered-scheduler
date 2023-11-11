@@ -93,7 +93,7 @@ const NewTodo = (props: Props) => {
       <div className="text-right">
         <button
           id="new-todo-submit"
-          className="mt-2 border-2 border-slate-300	border-solid"
+          className="px-2 py-[2px] mt-2 border-2 border-slate-300	border-dotted"
           type="submit"
           onClick={newTodo}
         >
