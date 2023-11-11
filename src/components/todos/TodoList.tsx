@@ -16,10 +16,10 @@ const TodoList = (props: Props) => {
     const currentUuid = localStorage.getItem('uuid')
     if (!currentUuid) return
 
-    async function getTodosByUserId() {
+    async function getTodosByUserId(uuid: string) {
       const query = `
         query {
-          todosByUserId(userId: "${currentUuid}"){
+          todosByUserId(userId: "${uuid}"){
             id
             title
             description
@@ -38,7 +38,7 @@ const TodoList = (props: Props) => {
         console.error(error)
       }
     }
-    getTodosByUserId()
+    getTodosByUserId(currentUuid)
   }, [])
 
   return (
