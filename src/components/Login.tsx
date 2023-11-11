@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import useAxios from '@/hooks/useAxios'
 import { useRouter } from 'next/router'
+import useAxios from '@/hooks/useAxios'
 
 type Props = {
   className: string

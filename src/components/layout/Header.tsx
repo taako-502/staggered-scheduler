@@ -12,6 +12,7 @@ const Header = () => {
     const currentUuid = localStorage.getItem('uuid') ?? ''
     if (!currentUuid) return
 
+    // FIXME: サインアップ後にユーザ名が表示されない
     async function getUsername(uuid: string) {
       const query = `
       query {
