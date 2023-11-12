@@ -1,18 +1,18 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { signout } from '@/utility/signout'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
+import { UserContext } from '@/contexts/UserContext'
 import useAxios from '@/hooks/useAxios'
 
 const Header = () => {
-  const [username, setUsername] = useState('')
+  const { user, setUser } = useContext(UserContext)
   const axios = useAxios()
 
   useEffect(() => {
     const currentUuid = localStorage.getItem('uuid') ?? ''
     if (!currentUuid) return
 
-    // FIXME: サインアップ後にユーザ名が表示されない
     async function getUsername(uuid: string) {
       const query = `
       query {
@@ -22,7 +22,8 @@ const Header = () => {
       }`
       try {
         const result = await axios.post('/query', { query })
-        setUsername(result.data.data.userById.username)
+        const user = result.data.data.userById
+        setUser(user)
       } catch (error) {
         console.error(error)
       }
@@ -37,7 +38,7 @@ const Header = () => {
           <Image src="/logo.png" alt="logo" width="300" height="30" />
         </Link>
         <div className="text-right">
-          <span className="mr-4">{username}</span>
+          <span className="mr-4">{user.username}</span>
           <button onClick={signout} className="relative z-40">
             SignOut
           </button>

@@ -1,6 +1,8 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { useRouter } from 'next/router'
 import useAxios from '@/hooks/useAxios'
+import { UserContext } from '@/contexts/UserContext'
+import { User } from '@/types/user.type'
 
 const SignUpForm = () => {
   const [name, setName] = useState('')
@@ -8,6 +10,7 @@ const SignUpForm = () => {
   const [error, setError] = useState('')
   const axios = useAxios()
   const router = useRouter()
+  const { setUser } = useContext(UserContext)
 
   const signup = async () => {
     const query = `
@@ -17,6 +20,7 @@ const SignUpForm = () => {
           password: "${password}"
         }) {
           id
+          username
         }
       }
     `
@@ -28,11 +32,12 @@ const SignUpForm = () => {
         return
       }
       setError('')
-      const currentUuid = result.data.data.createUser.id
-      localStorage.setItem('uuid', currentUuid)
+      const user: User = result.data.data.createUser
+      localStorage.setItem('uuid', user.id)
+      setUser(user)
       router.push('/')
     } catch (error: any) {
-      setError(error)
+      setError(error.message)
     }
   }
 

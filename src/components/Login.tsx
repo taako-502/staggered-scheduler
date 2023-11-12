@@ -1,6 +1,8 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { useRouter } from 'next/router'
 import useAxios from '@/hooks/useAxios'
+import { User } from '@/types/user.type'
+import { UserContext } from '@/contexts/UserContext'
 
 type Props = {
   className: string
@@ -12,6 +14,7 @@ const Login = (props: Props) => {
   const [error, setError] = useState('')
   const axios = useAxios()
   const router = useRouter()
+  const { setUser } = useContext(UserContext)
 
   const signin = async () => {
     try {
@@ -20,6 +23,7 @@ const Login = (props: Props) => {
           mutation login {
             login(username: "${username}", password: "${password}") {
               id
+              username
             }
           }
         `,
@@ -39,8 +43,9 @@ const Login = (props: Props) => {
         )
       } else {
         setError('')
-        const currentUuid = result.data.data.login.id
-        localStorage.setItem('uuid', currentUuid)
+        const user: User = result.data.data.login
+        localStorage.setItem('uuid', user.id)
+        setUser(user)
         router.push('/')
       }
     } catch {
