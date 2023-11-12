@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { signout } from '@/utility/signout'
+import { signout } from '@/utilities/signout.utility'
 import { useContext, useEffect, useState } from 'react'
 import { UserContext } from '@/contexts/UserContext'
 import useAxios from '@/hooks/useAxios'
@@ -29,7 +29,7 @@ const Header = () => {
       }
     }
     getUsername(currentUuid)
-  }, [])
+  })
 
   return (
     <div>

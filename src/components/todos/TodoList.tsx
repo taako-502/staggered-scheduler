@@ -1,4 +1,4 @@
-import { Todo } from '@/types/todo.type'
+import { Todo, createTodoFromGraphQLData } from '@/types/todo.type'
 import NewTodo from './NewTodo'
 import useAxios from '@/hooks/useAxios'
 import { useEffect, useState } from 'react'
@@ -33,13 +33,15 @@ const TodoList = (props: Props) => {
       `
       try {
         const result = await axios.post('/query', { query })
-        setTodos(result.data.data.todosByUserId)
+        const todos = result.data.data.todosByUserId
+        const convertedTodos = createTodoFromGraphQLData(todos)
+        setTodos(convertedTodos)
       } catch (error) {
         console.error(error)
       }
     }
     getTodosByUserId(currentUuid)
-  }, [])
+  })
 
   return (
     <div>

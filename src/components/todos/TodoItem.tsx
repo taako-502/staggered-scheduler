@@ -2,6 +2,7 @@ import { Todo } from '@/types/todo.type'
 import TodoCheckbox from './TodoCheckbox'
 import TodoStatus from './TodoStatus'
 import styles from './TodoItem.module.scss'
+import { formatDateISO8601 } from '@/utilities/time.utility'
 
 type Props = {
   todo: Todo
@@ -18,7 +19,9 @@ const TodoItem = (props: Props) => {
       <div className="inline-block">
         <div className="grid grid-cols-2">
           <h2 className="font-bold text-lg">{props.todo.title}</h2>
-          <p className="text-right">{props.todo.dueDateTime}</p>
+          <p className="text-right">
+            {formatDateISO8601(props.todo.dueDateTime)}
+          </p>
         </div>
         <p>{props.todo.description}</p>
         <TodoStatus id={props.todo.id} status={props.todo.status} />
