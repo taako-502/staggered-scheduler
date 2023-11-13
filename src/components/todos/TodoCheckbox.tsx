@@ -18,6 +18,7 @@ const TodoCheckbox = (props: Props) => {
     `
     try {
       await axios.post('/query', { query })
+      // FIXME:リロードしないようにすること
       window.location.reload()
     } catch (e) {
       console.error(e)

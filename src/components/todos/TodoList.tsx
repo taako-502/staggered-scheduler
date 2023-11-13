@@ -9,6 +9,7 @@ type Props = {
 }
 
 const TodoList = (props: Props) => {
+  const [displayDone, setDisplayDone] = useState<boolean>(false)
   const [todos, setTodos] = useState<Todo[]>([])
   const axios = useAxios()
 
@@ -45,10 +46,18 @@ const TodoList = (props: Props) => {
 
   return (
     <div>
+      <input
+        id="show-done"
+        type="checkbox"
+        onChange={(e) => setDisplayDone(e.target.checked)}
+      />
+      <label htmlFor="show-done">Display Closed Schedules</label>
       <ul>
-        {todos.map((todo) => {
-          return <TodoItem key={todo.id} todo={todo} />
-        })}
+        {todos
+          .filter((todo) => displayDone || !todo.done)
+          .map((todo) => {
+            return <TodoItem key={todo.id} todo={todo} />
+          })}
       </ul>
       <NewTodo isActiveNewTodo={props.isActiveNewTodo} />
     </div>
