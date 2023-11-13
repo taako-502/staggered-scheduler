@@ -56,6 +56,12 @@ const TodoList = (props: Props) => {
       <label htmlFor="show-done">Display Closed Schedules</label>
       <ul>
         {todos
+          .sort((a, b) => {
+            if (a.updatedAt && b.updatedAt) {
+              return b.updatedAt.getTime() - a.updatedAt.getTime()
+            }
+            return 0
+          })
           .filter((todo) => displayDone || !todo.done)
           .map((todo) => {
             return (
