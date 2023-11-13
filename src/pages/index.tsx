@@ -33,7 +33,10 @@ export default function Home() {
 
   return (
     <main>
-      <TodoList isActiveNewTodo={isActiveNewTodo} />
+      <TodoList
+        isActiveNewTodo={isActiveNewTodo}
+        setIsActiveNewTodo={setIsActiveNewTodo}
+      />
       <button
         onClick={() => {
           setIsActiveNewTodo(!isActiveNewTodo)

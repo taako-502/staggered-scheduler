@@ -8,6 +8,8 @@ import { useEffect, useState } from 'react'
 
 type Props = {
   isActiveNewTodo: boolean
+  setIsActiveNewTodo: (isActiveNewTodo: boolean) => void
+  updateTodoInList: (uuid: string) => {}
 }
 
 const NewTodo = (props: Props) => {
@@ -51,7 +53,12 @@ const NewTodo = (props: Props) => {
     `
     try {
       await axios.post('/query', { query })
-      window.location.reload()
+      setTitle('')
+      setDescription('')
+      setDueDateTime('')
+      setError('')
+      props.updateTodoInList(uuid)
+      props.setIsActiveNewTodo(false)
     } catch {
       console.error('error')
     }

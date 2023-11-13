@@ -6,6 +6,7 @@ import TodoItem from './TodoItem'
 
 type Props = {
   isActiveNewTodo: boolean
+  setIsActiveNewTodo: (isActiveNewTodo: boolean) => void
 }
 
 const TodoList = (props: Props) => {
@@ -66,7 +67,11 @@ const TodoList = (props: Props) => {
             )
           })}
       </ul>
-      <NewTodo isActiveNewTodo={props.isActiveNewTodo} />
+      <NewTodo
+        isActiveNewTodo={props.isActiveNewTodo}
+        setIsActiveNewTodo={props.setIsActiveNewTodo}
+        updateTodoInList={getTodosByUserId}
+      />
     </div>
   )
 }
