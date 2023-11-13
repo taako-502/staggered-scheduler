@@ -2,14 +2,27 @@ import { Todo } from '@/types/todo.type'
 import TodoCheckbox from './TodoCheckbox'
 import TodoStatus from './TodoStatus'
 import styles from './TodoItem.module.scss'
-import { formatDateISO8601 } from '@/utilities/time.utility'
+import {
+  ContoryCodeType,
+  addHoursToDate,
+  formatDateISO8601,
+  getTimeDifference,
+} from '@/utilities/time.utility'
 
 type Props = {
   todo: Todo
+  displayTimezoon: ContoryCodeType
   updateTodoInList: (uuid: string) => {}
 }
 
 const TodoItem = (props: Props) => {
+  const displayDueDateTime = (dueDateTime: Date | '') => {
+    if (!dueDateTime) return ''
+    const timeDifference = getTimeDifference(props.displayTimezoon)
+    const dueDateTimeGMT = addHoursToDate(dueDateTime, timeDifference)
+    return formatDateISO8601(dueDateTimeGMT)
+  }
+
   return (
     <li
       className={`pr-4 list-none border-2 border-slate-300 border-solid ${styles['todo-item__li--container']}`}
@@ -25,7 +38,7 @@ const TodoItem = (props: Props) => {
         <div className="grid grid-cols-2">
           <h2 className="font-bold text-lg">{props.todo.title}</h2>
           <p className="text-right">
-            {formatDateISO8601(props.todo.dueDateTime)}
+            {displayDueDateTime(props.todo.dueDateTime)}
           </p>
         </div>
         <p>{props.todo.description}</p>

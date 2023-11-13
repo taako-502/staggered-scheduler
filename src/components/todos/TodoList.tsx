@@ -3,6 +3,7 @@ import NewTodo from './NewTodo'
 import useAxios from '@/hooks/useAxios'
 import { useEffect, useState } from 'react'
 import TodoItem from './TodoItem'
+import { ContoryCodeType } from '@/utilities/time.utility'
 
 type Props = {
   isActiveNewTodo: boolean
@@ -11,6 +12,7 @@ type Props = {
 
 const TodoList = (props: Props) => {
   const [displayDone, setDisplayDone] = useState<boolean>(false)
+  const [displayTimezoon, setDisplayTimezoon] = useState<ContoryCodeType>('')
   const [todos, setTodos] = useState<Todo[]>([])
   const axios = useAxios()
 
@@ -48,6 +50,17 @@ const TodoList = (props: Props) => {
 
   return (
     <div>
+      <label htmlFor="show-timezoon">Display Timezoon</label>
+      <select
+        id="show-timezoon"
+        value={displayTimezoon}
+        onChange={(e) => setDisplayTimezoon(e.target.value as ContoryCodeType)}
+        className="bg-black"
+      >
+        <option value="gmt">GMT</option>
+        <option value="asia-tokyo">Asia/Tokyo</option>
+        <option value="africa-cairo">Africa/Cairo</option>
+      </select>
       <input
         id="show-done"
         type="checkbox"
@@ -68,12 +81,14 @@ const TodoList = (props: Props) => {
               <TodoItem
                 key={todo.id}
                 todo={todo}
+                displayTimezoon={displayTimezoon}
                 updateTodoInList={getTodosByUserId}
               />
             )
           })}
       </ul>
       <NewTodo
+        displayTimezoon={displayTimezoon}
         isActiveNewTodo={props.isActiveNewTodo}
         setIsActiveNewTodo={props.setIsActiveNewTodo}
         updateTodoInList={getTodosByUserId}

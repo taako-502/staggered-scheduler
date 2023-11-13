@@ -1,12 +1,13 @@
 import useAxios from '@/hooks/useAxios'
 import {
   ContoryCodeType,
-  addHoursToDate,
   getTimeDifference,
+  subtractHoursFromDate,
 } from '@/utilities/time.utility'
 import { useEffect, useState } from 'react'
 
 type Props = {
+  displayTimezoon: string
   isActiveNewTodo: boolean
   setIsActiveNewTodo: (isActiveNewTodo: boolean) => void
   updateTodoInList: (uuid: string) => {}
@@ -37,7 +38,7 @@ const NewTodo = (props: Props) => {
     }
     const timeDifference = getTimeDifference(contoryCd)
     const dueDateTimeGMT = dueDateTime
-      ? addHoursToDate(dueDateTime, timeDifference)
+      ? subtractHoursFromDate(dueDateTime, timeDifference)
       : ''
     const query = `
       mutation {
@@ -125,8 +126,8 @@ const NewTodo = (props: Props) => {
           value={contoryCd}
           onChange={(e) => setContoryCd(e.target.value as ContoryCodeType)}
         >
-          <option value="jp">Japan Time(+9)</option>
-          <option value="eg">Egypt Time(+2)</option>
+          <option value="asia-tokyo">Asia/Tokyo</option>
+          <option value="africa-cairo">Africa/Cairo</option>
         </select>
       </div>
       <div className="text-right">
