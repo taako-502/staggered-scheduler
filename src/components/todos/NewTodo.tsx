@@ -1,6 +1,7 @@
 import useAxios from '@/hooks/useAxios'
 import {
   ContoryCodeType,
+  convertToGMT,
   getTimeDifference,
   subtractHoursFromDate,
 } from '@/utilities/time.utility'
@@ -36,9 +37,10 @@ const NewTodo = (props: Props) => {
       setError('titleは必須です')
       return
     }
+
     const timeDifference = getTimeDifference(contoryCd)
     const dueDateTimeGMT = dueDateTime
-      ? subtractHoursFromDate(dueDateTime, timeDifference)
+      ? subtractHoursFromDate(convertToGMT(dueDateTime), timeDifference)
       : ''
     const query = `
       mutation {

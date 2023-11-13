@@ -1,8 +1,10 @@
-export type ContoryCodeType = '' | 'asia-tokyo' | 'africa-cairo'
+export type ContoryCodeType = '' | 'gmt' | 'asia-tokyo' | 'africa-cairo'
 
-export const getTimeDifference = (contory: ContoryCodeType): number => {
+export const getTimeDifference = (timezoon: ContoryCodeType): number => {
   // TODO: 適切なタイムゾーンを取得するためのAPIを実装する必要がある
-  switch (contory) {
+  switch (timezoon) {
+    case 'gmt':
+      return 0
     case 'asia-tokyo':
       return 9
     case 'africa-cairo':
@@ -39,4 +41,8 @@ export const convertToDate = (dueDateTime: string): Date | null => {
 
   // Date オブジェクトを生成
   return new Date(dueDateTime)
+}
+
+export const convertToGMT = (date: Date): Date => {
+  return new Date(date.getTime() - date.getTimezoneOffset() * 60000)
 }
