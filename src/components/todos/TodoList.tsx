@@ -13,34 +13,35 @@ const TodoList = (props: Props) => {
   const [todos, setTodos] = useState<Todo[]>([])
   const axios = useAxios()
 
+  async function getTodosByUserId(uuid: string) {
+    const query = `
+      query {
+        todosByUserId(userId: "${uuid}"){
+          id
+          title
+          description
+          done
+          dueDateTime
+          status
+          createdAt
+          updatedAt
+        }
+      }
+    `
+    try {
+      const result = await axios.post('/query', { query })
+      const todos = result.data.data.todosByUserId
+      const convertedTodos = createTodoFromGraphQLData(todos)
+      setTodos(convertedTodos)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   useEffect(() => {
     const currentUuid = localStorage.getItem('uuid')
     if (!currentUuid) return
 
-    async function getTodosByUserId(uuid: string) {
-      const query = `
-        query {
-          todosByUserId(userId: "${uuid}"){
-            id
-            title
-            description
-            done
-            dueDateTime
-            status
-            createdAt
-            updatedAt
-          }
-        }
-      `
-      try {
-        const result = await axios.post('/query', { query })
-        const todos = result.data.data.todosByUserId
-        const convertedTodos = createTodoFromGraphQLData(todos)
-        setTodos(convertedTodos)
-      } catch (error) {
-        console.error(error)
-      }
-    }
     getTodosByUserId(currentUuid)
   })
 
@@ -56,7 +57,13 @@ const TodoList = (props: Props) => {
         {todos
           .filter((todo) => displayDone || !todo.done)
           .map((todo) => {
-            return <TodoItem key={todo.id} todo={todo} />
+            return (
+              <TodoItem
+                key={todo.id}
+                todo={todo}
+                updateTodoInList={getTodosByUserId}
+              />
+            )
           })}
       </ul>
       <NewTodo isActiveNewTodo={props.isActiveNewTodo} />

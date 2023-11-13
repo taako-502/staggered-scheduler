@@ -3,6 +3,7 @@ import useAxios from '@/hooks/useAxios'
 type Props = {
   id: string
   done: boolean
+  updateTodoInList: (uuid: string) => {}
 }
 
 const TodoCheckbox = (props: Props) => {
@@ -18,8 +19,7 @@ const TodoCheckbox = (props: Props) => {
     `
     try {
       await axios.post('/query', { query })
-      // FIXME:リロードしないようにすること
-      window.location.reload()
+      props.updateTodoInList(id)
     } catch (e) {
       console.error(e)
     }

@@ -6,6 +6,7 @@ import { formatDateISO8601 } from '@/utilities/time.utility'
 
 type Props = {
   todo: Todo
+  updateTodoInList: (uuid: string) => {}
 }
 
 const TodoItem = (props: Props) => {
@@ -14,7 +15,11 @@ const TodoItem = (props: Props) => {
       className={`pr-4 list-none border-2 border-slate-300 border-solid ${styles['todo-item__li--container']}`}
     >
       <div className="flex items-center justify-center">
-        <TodoCheckbox id={props.todo.id} done={props.todo.done} />
+        <TodoCheckbox
+          id={props.todo.id}
+          done={props.todo.done}
+          updateTodoInList={props.updateTodoInList}
+        />
       </div>
       <div className="inline-block">
         <div className="grid grid-cols-2">
