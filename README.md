@@ -16,6 +16,12 @@ yarn dev
 
 Open [http://localhost:3333](http://localhost:3333) with your browser to see the result.
 
+## Deploy
+
+```bash
+vercel deploy
+```
+
 ## Backend
 
 https://github.com/taako-502/go-graphql-nosql
