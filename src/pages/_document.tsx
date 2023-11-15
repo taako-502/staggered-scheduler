@@ -1,4 +1,4 @@
-import Header from '@/components/layout/Header'
+import { Analytics } from '@vercel/analytics/react'
 import { Html, Head, Main, NextScript } from 'next/document'
 
 export default function Document() {
@@ -10,6 +10,7 @@ export default function Document() {
       <body className="py-14">
         <Main />
         <NextScript />
+        <Analytics />
       </body>
     </Html>
   )
