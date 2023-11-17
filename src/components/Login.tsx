@@ -18,7 +18,7 @@ const Login = (props: Props) => {
 
   const signin = async () => {
     try {
-      const result = await axios.post('/query/', {
+      const result = await axios.post('/', {
         query: `
           mutation login {
             login(username: "${username}", password: "${password}") {
