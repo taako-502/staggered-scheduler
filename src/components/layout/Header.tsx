@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { signout } from '@/utilities/signout.utility'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect } from 'react'
 import { UserContext } from '@/contexts/UserContext'
 import useAxios from '@/hooks/useAxios'
 
