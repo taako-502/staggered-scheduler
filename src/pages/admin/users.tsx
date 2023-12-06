@@ -39,6 +39,7 @@ const Users = () => {
       setUsers(result.data.data.users)
     }
     fetchUsers()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
