@@ -6,28 +6,25 @@ import ErrorMessage from '../ErrorMessage'
 type Props = {
   id: string
   status: TodoStatusType
+  setStatus: (status: TodoStatusType) => void
 }
 
-const TodoStatus: React.FC<Props> = ({ id, status }) => {
-  const [updateStatus, { loading, error }] = useMutation(
-    UPDATE_TODO_STATUS_MUTATION,
-    {
-      onCompleted: () => {
-        // FIXME: リロードはやめたい
-        window.location.reload()
-      },
-      onError: (error) => {
-        console.log(error)
-      },
+const TodoStatus: React.FC<Props> = ({ id, status, setStatus }) => {
+  const [updateStatus, { error }] = useMutation(UPDATE_TODO_STATUS_MUTATION, {
+    onCompleted: (data) => {
+      setStatus(data.updateTodoStatus.status)
     },
-  )
+    onError: (error) => {
+      console.log(error)
+    },
+  })
 
   const handleChangeStatus = (newStatus: TodoStatusType) => {
     updateStatus({ variables: { id, status: newStatus } })
   }
 
-  if (loading) return <p>Loading...</p>
   if (error) return <ErrorMessage message="Error updating status" />
+
   return (
     <select
       value={status}

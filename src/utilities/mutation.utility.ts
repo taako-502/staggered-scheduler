@@ -27,9 +27,10 @@ export const ADMIN_LOGIN_MUTATION = gql`
 `
 
 export const UPDATE_TODO_STATUS_MUTATION = gql`
-  mutation UpdateTodoStatus($id: String!, $status: String!) {
+  mutation UpdateTodoStatus($id: ID!, $status: String!) {
     updateTodoStatus(id: $id, status: $status) {
       id
+      status
     }
   }
 `

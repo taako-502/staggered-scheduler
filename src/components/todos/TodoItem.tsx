@@ -8,6 +8,7 @@ import {
   formatDateISO8601,
   getTimeDifference,
 } from '@/utilities/time.utility'
+import { useEffect, useState } from 'react'
 
 type Props = {
   todo: Todo
@@ -15,13 +16,28 @@ type Props = {
   updateTodoInList: (uuid: string) => {}
 }
 
-const TodoItem = (props: Props) => {
+const TodoItem: React.FC<Props> = ({
+  todo: todosFromDb,
+  displayTimezoon,
+  updateTodoInList,
+}) => {
+  const [todo, setTodo] = useState(todosFromDb)
+  const [status, setStatus] = useState(todosFromDb.status)
+
   const displayDueDateTime = (dueDateTime: Date | '') => {
     if (!dueDateTime) return ''
-    const timeDifference = getTimeDifference(props.displayTimezoon)
+    const timeDifference = getTimeDifference(displayTimezoon)
     const dueDateTimeGMT = addHoursToDate(dueDateTime, timeDifference)
     return formatDateISO8601(dueDateTimeGMT)
   }
+
+  useEffect(() => {
+    setTodo({
+      ...todo,
+      status,
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status])
 
   return (
     <li
@@ -29,20 +45,20 @@ const TodoItem = (props: Props) => {
     >
       <div className="flex items-center justify-center">
         <TodoCheckbox
-          id={props.todo.id}
-          done={props.todo.done}
-          updateTodoInList={props.updateTodoInList}
+          id={todosFromDb.id}
+          done={todosFromDb.done}
+          updateTodoInList={updateTodoInList}
         />
       </div>
       <div className="inline-block">
         <div className="grid grid-cols-2">
-          <h2 className="font-bold text-lg">{props.todo.title}</h2>
+          <h2 className="font-bold text-lg">{todosFromDb.title}</h2>
           <p className="text-right">
-            {displayDueDateTime(props.todo.dueDateTime)}
+            {displayDueDateTime(todosFromDb.dueDateTime)}
           </p>
         </div>
-        <p>{props.todo.description}</p>
-        <TodoStatusType id={props.todo.id} status={props.todo.status} />
+        <p>{todosFromDb.description}</p>
+        <TodoStatusType id={todo.id} status={status} setStatus={setStatus} />
       </div>
     </li>
   )
