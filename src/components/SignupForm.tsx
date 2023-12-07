@@ -5,6 +5,9 @@ import { User } from '@/types/user.type'
 import { useMutation } from '@apollo/client'
 import { SIGNUP_MUTATION } from '@/utilities/mutation.utility'
 import ErrorMessage from './ErrorMessage'
+import UsernameText from './inputs/UsernameText'
+import PasswordText from './inputs/PasswordText'
+import SignupButton from './inputs/SignupButton'
 
 const SignupForm = () => {
   const [name, setName] = useState('')
@@ -35,41 +38,12 @@ const SignupForm = () => {
   return (
     <div className="mx-auto max-w-[320px]">
       <div className="mt-2">
-        <label
-          htmlFor="name"
-          className="mr-2 inline-block w-full max-w-[120px]"
-        >
-          Username
-        </label>
-        <input
-          id="name"
-          type="text"
-          className="text-slate-500"
-          onChange={(e) => setName(e.target.value)}
-        />
+        <UsernameText username={name} setUsername={setName} />
       </div>
       <div className="mt-2">
-        <label
-          htmlFor="password"
-          className="mr-2 inline-block w-full max-w-[120px]"
-        >
-          Password
-        </label>
-        <input
-          id="password"
-          type="password"
-          className="text-slate-500"
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <PasswordText password={password} setPassword={setPassword} />
       </div>
-      <button
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold rounded block mx-auto mt-2"
-        type="button"
-        onClick={handleSignup}
-        disabled={loading}
-      >
-        SingUp
-      </button>
+      <SignupButton handler={handleSignup} loading={loading} />
       {error && <ErrorMessage message={error} />}
     </div>
   )

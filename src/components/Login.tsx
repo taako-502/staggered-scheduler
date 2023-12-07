@@ -6,6 +6,9 @@ import { LOGIN_MUTATION } from '@/utilities/mutation.utility'
 import { useMutation } from '@apollo/client'
 import { isGqlErrorResponse } from '@/types/errors.type'
 import ErrorMessage from './ErrorMessage'
+import PasswordText from './inputs/PasswordText'
+import UsernameText from './inputs/UsernameText'
+import LoginButton from './inputs/LoginButton'
 
 type Props = {
   className: string
@@ -40,7 +43,7 @@ const Login = (props: Props) => {
     },
   })
 
-  const handleSignup = async () => {
+  const handleSignin = async () => {
     try {
       await signin()
     } catch (error) {
@@ -54,46 +57,13 @@ const Login = (props: Props) => {
       <div className="mx-auto max-w-[320px]">
         <div>
           <h1>Login</h1>
-          <label
-            htmlFor="username"
-            className="mr-2 inline-block w-full max-w-[120px]"
-          >
-            Username
-          </label>
-          <input
-            id="username"
-            type="text"
-            className="text-black px-2 py-1"
-            placeholder="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
+          <UsernameText username={username} setUsername={setUsername} />
         </div>
         <div className="mt-2">
-          <label
-            htmlFor="password"
-            className="mr-2 inline-block w-full max-w-[120px]"
-          >
-            Password
-          </label>
-          <input
-            id="password"
-            type="password"
-            className="text-black px-2 py-1"
-            placeholder="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <PasswordText password={password} setPassword={setPassword} />
         </div>
       </div>
-      <button
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold rounded block mx-auto mt-2"
-        type="button"
-        onClick={handleSignup}
-        disabled={loading}
-      >
-        Login
-      </button>
+      <LoginButton handler={handleSignin} loading={loading} />
       <ErrorMessage message={error} />
     </div>
   )
