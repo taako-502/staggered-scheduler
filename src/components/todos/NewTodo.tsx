@@ -6,6 +6,7 @@ import {
   subtractHoursFromDate,
 } from '@/utilities/time.utility'
 import { useEffect, useState } from 'react'
+import ErrorMessage from '../ErrorMessage'
 
 type Props = {
   displayTimezoon: string
@@ -142,7 +143,7 @@ const NewTodo = (props: Props) => {
           Add
         </button>
       </div>
-      {error && <p className="text-red-500">{error}</p>}
+      {error && <ErrorMessage message={error} />}
     </div>
   )
 }

@@ -4,6 +4,7 @@ import { UserContext } from '@/contexts/UserContext'
 import { User } from '@/types/user.type'
 import { useMutation } from '@apollo/client'
 import { SIGNUP_MUTATION } from '@/utilities/query.utility'
+import ErrorMessage from './ErrorMessage'
 
 const SignupForm = () => {
   const [name, setName] = useState('')
@@ -69,7 +70,7 @@ const SignupForm = () => {
       >
         SingUp
       </button>
-      {error && <p className="text-red-500">{error}</p>}
+      {error && <ErrorMessage message={error} />}
     </div>
   )
 }

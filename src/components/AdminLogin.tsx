@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import useAxios from '@/hooks/useAxios'
 import { useRouter } from 'next/router'
+import ErrorMessage from './ErrorMessage'
 
 type Props = {
   className: string
@@ -99,7 +100,7 @@ const AdminLogin = (props: Props) => {
       >
         Login
       </button>
-      <p className="text-red-500">{error}</p>
+      <ErrorMessage message={error} />
     </div>
   )
 }

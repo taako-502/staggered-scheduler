@@ -5,6 +5,7 @@ import { UserContext } from '@/contexts/UserContext'
 import { LOGIN_MUTATION } from '@/utilities/query.utility'
 import { useMutation } from '@apollo/client'
 import { isGqlErrorResponse } from '@/types/errors.type'
+import ErrorMessage from './ErrorMessage'
 
 type Props = {
   className: string
@@ -93,7 +94,7 @@ const Login = (props: Props) => {
       >
         Login
       </button>
-      <p className="text-red-500">{error}</p>
+      <ErrorMessage message={error} />
     </div>
   )
 }
