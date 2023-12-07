@@ -1,3 +1,4 @@
+import ErrorMessage from '@/components/ErrorMessage'
 import { User } from '@/types/user.type'
 import { GET_USERS_QUERY, IS_ADMIN_QUERY } from '@/utilities/query.utility'
 import { useQuery } from '@apollo/client'
@@ -5,8 +6,14 @@ import { useEffect, useState } from 'react'
 
 const Users = () => {
   const [error, setError] = useState<string>('')
+  const [uuid, setUuid] = useState(null)
+
+  useEffect(() => {
+    setUuid(localStorage.getItem('uuid'))
+  }, [])
+
   const { data: adminData } = useQuery(IS_ADMIN_QUERY, {
-    variables: { id: localStorage.getItem('uuid') },
+    variables: { id: uuid },
   })
   const { data: usersData, loading: loadingUsers } = useQuery(GET_USERS_QUERY)
 
@@ -17,7 +24,7 @@ const Users = () => {
   }, [adminData])
 
   if (loadingUsers) return <div>Loading...</div>
-  if (error) return <div color="text-red-600">{error}</div>
+  if (error) return <ErrorMessage message={error} />
 
   return (
     <div>

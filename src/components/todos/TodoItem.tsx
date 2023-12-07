@@ -1,6 +1,6 @@
 import { Todo } from '@/types/todo.type'
 import TodoCheckbox from './TodoCheckbox'
-import TodoStatus from './TodoStatus'
+import TodoStatusType from './TodoStatus'
 import styles from './TodoItem.module.scss'
 import {
   ContoryCodeType,
@@ -42,7 +42,7 @@ const TodoItem = (props: Props) => {
           </p>
         </div>
         <p>{props.todo.description}</p>
-        <TodoStatus id={props.todo.id} status={props.todo.status} />
+        <TodoStatusType id={props.todo.id} status={props.todo.status} />
       </div>
     </li>
   )

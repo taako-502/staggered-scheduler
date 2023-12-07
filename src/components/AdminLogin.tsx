@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 import ErrorMessage from './ErrorMessage'
 import { useMutation } from '@apollo/client'
-import { ADMIN_LOGIN_MUTATION } from '@/utilities/query.utility'
+import { ADMIN_LOGIN_MUTATION } from '@/utilities/mutation.utility'
 
 type Props = {
   className: string

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { UserContext } from '@/contexts/UserContext'
 import { User } from '@/types/user.type'
 import { useMutation } from '@apollo/client'
-import { SIGNUP_MUTATION } from '@/utilities/query.utility'
+import { SIGNUP_MUTATION } from '@/utilities/mutation.utility'
 import ErrorMessage from './ErrorMessage'
 
 const SignupForm = () => {
