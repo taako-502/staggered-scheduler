@@ -1,9 +1,11 @@
 import { Todo, createTodoFromGraphQLData } from '@/types/todo.type'
 import NewTodo from './NewTodo'
 import useAxios from '@/hooks/useAxios'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import TodoItem from './TodoItem'
 import { ContoryCodeType } from '@/utilities/time.utility'
+import TimezoonSelect from '../inputs/TimezoonSelect'
+import ShowDoneCheckbox from '../inputs/ShowDoneCheckbox'
 
 type Props = {
   isActiveNewTodo: boolean
@@ -14,59 +16,51 @@ const TodoList = (props: Props) => {
   const [displayDone, setDisplayDone] = useState<boolean>(false)
   const [displayTimezoon, setDisplayTimezoon] = useState<ContoryCodeType>('')
   const [todos, setTodos] = useState<Todo[]>([])
+  const [uuid, setUuid] = useState<string>('')
   const axios = useAxios()
 
-  async function getTodosByUserId(uuid: string) {
-    const query = `
-      query {
-        todosByUserId(userId: "${uuid}"){
-          id
-          title
-          description
-          done
-          dueDateTime
-          status
-          createdAt
-          updatedAt
+  const getTodosByUserId = useCallback(
+    async (uuid: string) => {
+      const query = `
+        query {
+          todosByUserId(userId: "${uuid}"){
+            id
+            title
+            description
+            done
+            dueDateTime
+            status
+            createdAt
+            updatedAt
+          }
         }
+      `
+      try {
+        const result = await axios.post('/query', { query })
+        const todos = result.data.data.todosByUserId
+        const convertedTodos = createTodoFromGraphQLData(todos)
+        setTodos(convertedTodos)
+      } catch (error) {
+        console.error(error)
       }
-    `
-    try {
-      const result = await axios.post('/query', { query })
-      const todos = result.data.data.todosByUserId
-      const convertedTodos = createTodoFromGraphQLData(todos)
-      setTodos(convertedTodos)
-    } catch (error) {
-      console.error(error)
-    }
-  }
+    },
+    [axios],
+  )
 
   useEffect(() => {
-    const currentUuid = localStorage.getItem('uuid')
-    if (!currentUuid) return
-
-    getTodosByUserId(currentUuid)
-  })
+    setUuid(localStorage.getItem('uuid'))
+    if (!uuid) return
+    getTodosByUserId(uuid)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [uuid])
 
   return (
     <div>
-      <label htmlFor="show-timezoon">Display Timezoon</label>
-      <select
-        id="show-timezoon"
-        value={displayTimezoon}
-        onChange={(e) => setDisplayTimezoon(e.target.value as ContoryCodeType)}
-        className="bg-black"
-      >
-        <option value="gmt">GMT</option>
-        <option value="asia-tokyo">Asia/Tokyo</option>
-        <option value="africa-cairo">Africa/Cairo</option>
-      </select>
-      <input
-        id="show-done"
-        type="checkbox"
-        onChange={(e) => setDisplayDone(e.target.checked)}
+      <TimezoonSelect
+        displayTimezoon={displayTimezoon}
+        setDisplayTimezoon={setDisplayTimezoon}
       />
-      <label htmlFor="show-done">Display Closed Schedules</label>
+      <ShowDoneCheckbox setDisplayDone={setDisplayDone} />
       <ul>
         {todos
           .sort((a, b) => {
