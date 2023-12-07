@@ -26,6 +26,15 @@ export const GET_USERS_QUERY = gql`
   }
 `
 
+export const ADMIN_LOGIN_MUTATION = gql`
+  mutation Login($username: String!, $password: String!) {
+    login(username: $username, password: $password) {
+      id
+      isAdmin
+    }
+  }
+`
+
 export const IS_ADMIN_QUERY = gql`
   query IsAdmin($id: String!) {
     userById(id: $id) {
