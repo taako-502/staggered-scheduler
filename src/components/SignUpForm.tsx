@@ -2,18 +2,10 @@ import { useContext, useState } from 'react'
 import { useRouter } from 'next/router'
 import { UserContext } from '@/contexts/UserContext'
 import { User } from '@/types/user.type'
-import { useMutation, gql } from '@apollo/client'
+import { useMutation } from '@apollo/client'
+import { SIGNUP_MUTATION } from '@/utilities/query.utility'
 
-const SIGNUP_MUTATION = gql`
-  mutation SignUp($username: String!, $password: String!) {
-    createUser(input: { username: $username, password: $password }) {
-      id
-      username
-    }
-  }
-`
-
-const SignUpForm = () => {
+const SignupForm = () => {
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -21,19 +13,14 @@ const SignUpForm = () => {
   const { setUser } = useContext(UserContext)
 
   const [signup, { loading }] = useMutation(SIGNUP_MUTATION, {
-    variables: {
-      username: name,
-      password: password,
-    },
+    variables: { username: name, password: password },
     onCompleted: (data) => {
       const user: User = data.createUser
       localStorage.setItem('uuid', user.id)
       setUser(user)
       router.push('/')
     },
-    onError: (error) => {
-      setError(error.message)
-    },
+    onError: (error) => setError(error.message),
   })
 
   const handleSignup = async () => {
@@ -87,4 +74,4 @@ const SignUpForm = () => {
   )
 }
 
-export default SignUpForm
+export default SignupForm
