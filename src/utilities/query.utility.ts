@@ -33,7 +33,7 @@ export const GET_USER_BY_ID_QUERY = gql`
 `
 
 export const IS_ADMIN_QUERY = gql`
-  query IsAdmin($id: String!) {
+  query IsAdmin($id: ID!) {
     userById(id: $id) {
       id
       isAdmin
