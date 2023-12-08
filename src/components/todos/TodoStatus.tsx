@@ -15,7 +15,7 @@ const TodoStatus: React.FC<Props> = ({ id, status, setStatus }) => {
       setStatus(data.updateTodoStatus.status)
     },
     onError: (error) => {
-      console.log(error)
+      console.error(error)
     },
   })
 

@@ -25,7 +25,6 @@ const Login = (props: Props) => {
     variables: { username, password },
     onCompleted: (data) => {
       const login = data.login
-      console.log(login)
       if (isGraphQLUser(login)) {
         const user: User = login
         localStorage.setItem('uuid', user.id)
