@@ -41,6 +41,7 @@ const Header = () => {
   const signout = () => {
     localStorage.removeItem('uuid')
     route.push('/')
+    window.location.reload()
   }
 
   return (
