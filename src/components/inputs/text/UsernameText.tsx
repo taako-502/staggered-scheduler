@@ -17,6 +17,7 @@ const UsernameText: React.FC<Props> = ({ username, setUsername }) => {
         className="text-black px-2 py-1"
         placeholder="username"
         value={username}
+        autoComplete="username"
         onChange={(e) => setUsername(e.target.value)}
       />
     </>

@@ -17,6 +17,7 @@ const PasswordText: React.FC<Props> = ({ password, setPassword }) => {
         className="text-black px-2 py-1"
         placeholder="password"
         value={password}
+        autoComplete="current-password"
         onChange={(e) => setPassword(e.target.value)}
       />
     </>

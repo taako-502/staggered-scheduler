@@ -14,7 +14,7 @@ type Props = {
   className: string
 }
 
-const Login = (props: Props) => {
+const Login: React.FC<Props> = ({ className }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -42,28 +42,31 @@ const Login = (props: Props) => {
     },
   })
 
-  const handleSignin = async () => {
+  const handleSignin = async (event: { preventDefault: () => void }) => {
+    event.preventDefault()
     try {
       await signin()
     } catch (error) {
       console.error('Login error:', error)
-      setError(error)
+      setError(error.toString())
     }
   }
 
   return (
-    <div className={props.className}>
+    <div className={className}>
       <div className="mx-auto max-w-[320px]">
-        <div>
-          <h1>Login</h1>
-          <UsernameText username={username} setUsername={setUsername} />
-        </div>
-        <div className="mt-2">
-          <PasswordText password={password} setPassword={setPassword} />
-        </div>
+        <h1>Login</h1>
+        <form onSubmit={handleSignin}>
+          <div>
+            <UsernameText username={username} setUsername={setUsername} />
+          </div>
+          <div className="mt-2">
+            <PasswordText password={password} setPassword={setPassword} />
+          </div>
+          <LoginButton handler={handleSignin} loading={loading} />
+        </form>
       </div>
-      <LoginButton handler={handleSignin} loading={loading} />
-      <ErrorMessage message={error} />
+      {error && <ErrorMessage message={error} />}
     </div>
   )
 }

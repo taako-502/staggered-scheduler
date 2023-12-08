@@ -1,5 +1,5 @@
 type Props = {
-  handler: () => void
+  handler: (event: { preventDefault: () => void }) => void
   loading: boolean
 }
 const LoginButton: React.FC<Props> = ({ handler, loading }) => (
