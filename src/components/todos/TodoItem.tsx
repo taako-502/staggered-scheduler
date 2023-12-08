@@ -13,7 +13,6 @@ import { useEffect, useState } from 'react'
 type Props = {
   todo: Todo
   displayTimezoon: ContoryCodeType
-  updateTodoInList: (uuid: string) => {}
 }
 
 const TodoItem: React.FC<Props> = ({ todo: todosFromDb, displayTimezoon }) => {
