@@ -16,13 +16,10 @@ type Props = {
   updateTodoInList: (uuid: string) => {}
 }
 
-const TodoItem: React.FC<Props> = ({
-  todo: todosFromDb,
-  displayTimezoon,
-  updateTodoInList,
-}) => {
+const TodoItem: React.FC<Props> = ({ todo: todosFromDb, displayTimezoon }) => {
   const [todo, setTodo] = useState(todosFromDb)
   const [status, setStatus] = useState(todosFromDb.status)
+  const [done, setDone] = useState(todosFromDb.done)
 
   const displayDueDateTime = (dueDateTime: Date | '') => {
     if (!dueDateTime) return ''
@@ -32,23 +29,21 @@ const TodoItem: React.FC<Props> = ({
   }
 
   useEffect(() => {
+    // FIXME: この実装方法だとdoneフィルタが動作しなくなる
     setTodo({
       ...todo,
       status,
+      done,
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status])
+  }, [status, done])
 
   return (
     <li
       className={`pr-4 list-none border-2 border-slate-300 border-solid ${styles['todo-item__li--container']}`}
     >
       <div className="flex items-center justify-center">
-        <TodoCheckbox
-          id={todosFromDb.id}
-          done={todosFromDb.done}
-          updateTodoInList={updateTodoInList}
-        />
+        <TodoCheckbox id={todo.id} done={todo.done} setDone={setDone} />
       </div>
       <div className="inline-block">
         <div className="grid grid-cols-2">

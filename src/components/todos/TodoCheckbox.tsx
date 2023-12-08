@@ -4,14 +4,14 @@ import { useMutation } from '@apollo/client'
 type Props = {
   id: string
   done: boolean
-  updateTodoInList: (uuid: string) => {}
+  setDone: (done: boolean) => void
 }
 
-const TodoCheckbox: React.FC<Props> = ({ id, done, updateTodoInList }) => {
+const TodoCheckbox: React.FC<Props> = ({ id, done, setDone }) => {
   const [updateTodoDone, { error }] = useMutation(UPDATE_TODO_DONE_MUTATION, {
     onCompleted: (data) => {
-      // FIXME: おそらく正常に動作していない
-      updateTodoInList(id)
+      const done = data.updateTodoDone.done
+      setDone(done)
     },
     onError: (error) => {
       console.error(error)
