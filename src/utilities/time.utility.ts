@@ -5,10 +5,10 @@ export const getTimeDifference = (timezoon: ContoryCodeType): number => {
   switch (timezoon) {
     case 'gmt':
       return 0
-    case 'asia-tokyo':
-      return 9
     case 'africa-cairo':
       return 2
+    case 'asia-tokyo':
+      return 9
     default:
       return 0
   }

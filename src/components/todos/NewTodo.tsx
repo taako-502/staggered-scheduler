@@ -28,7 +28,7 @@ const NewTodo: React.FC<Props> = ({
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [dueDateTime, setDueDateTime] = useState<Date | ''>('')
-  const [contoryCd, setContoryCd] = useState<ContoryCodeType>('')
+  const [contoryCd, setContoryCd] = useState<ContoryCodeType>('asia-tokyo')
   const [uuid, setUuid] = useState('')
   const [error, setError] = useState('')
 
