@@ -5,9 +5,9 @@ import { User } from '@/types/user.type'
 import { useMutation } from '@apollo/client'
 import { SIGNUP_MUTATION } from '@/utilities/mutation.utility'
 import ErrorMessage from './ErrorMessage'
-import UsernameText from './inputs/UsernameText'
-import PasswordText from './inputs/PasswordText'
-import SignupButton from './inputs/SignupButton'
+import UsernameText from './inputs/text/UsernameText'
+import PasswordText from './inputs/text/PasswordText'
+import SignupButton from './inputs/buttons/SignupButton'
 
 const SignupForm = () => {
   const [name, setName] = useState('')

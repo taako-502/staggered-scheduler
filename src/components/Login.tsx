@@ -6,9 +6,9 @@ import { LOGIN_MUTATION } from '@/utilities/mutation.utility'
 import { useMutation } from '@apollo/client'
 import { isGqlErrorResponse } from '@/types/errors.type'
 import ErrorMessage from './ErrorMessage'
-import PasswordText from './inputs/PasswordText'
-import UsernameText from './inputs/UsernameText'
-import LoginButton from './inputs/LoginButton'
+import PasswordText from './inputs/text/PasswordText'
+import UsernameText from './inputs/text/UsernameText'
+import LoginButton from './inputs/buttons/LoginButton'
 
 type Props = {
   className: string

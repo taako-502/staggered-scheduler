@@ -3,9 +3,9 @@ import { useRouter } from 'next/router'
 import ErrorMessage from './ErrorMessage'
 import { useMutation } from '@apollo/client'
 import { ADMIN_LOGIN_MUTATION } from '@/utilities/mutation.utility'
-import PasswordText from './inputs/PasswordText'
-import UsernameText from './inputs/UsernameText'
-import LoginButton from './inputs/LoginButton'
+import PasswordText from './inputs/text/PasswordText'
+import UsernameText from './inputs/text/UsernameText'
+import LoginButton from './inputs/buttons/LoginButton'
 
 type Props = {
   className: string
