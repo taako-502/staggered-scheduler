@@ -23,10 +23,14 @@ const TodoList = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uuid])
 
-  const { data, loading, error } = useQuery(TODOS_BY_USER_ID_QUERY, {
+  const { data, loading, error, refetch } = useQuery(TODOS_BY_USER_ID_QUERY, {
     variables: { userId: uuid },
     skip: !uuid,
   })
+
+  const refetchHandler = () => {
+    refetch()
+  }
 
   const todos = data ? createTodoFromGraphQLData(data.todosByUserId) : []
 
@@ -62,6 +66,7 @@ const TodoList = (props: Props) => {
       <NewTodo
         isActiveNewTodo={props.isActiveNewTodo}
         setIsActiveNewTodo={props.setIsActiveNewTodo}
+        refetch={refetchHandler}
       />
     </div>
   )

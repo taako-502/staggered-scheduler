@@ -17,9 +17,14 @@ import { ADD_TODO_MUTATION } from '@/utilities/mutation.utility'
 type Props = {
   isActiveNewTodo: boolean
   setIsActiveNewTodo: (isActiveNewTodo: boolean) => void
+  refetch: () => void
 }
 
-const NewTodo: React.FC<Props> = ({ isActiveNewTodo, setIsActiveNewTodo }) => {
+const NewTodo: React.FC<Props> = ({
+  isActiveNewTodo,
+  setIsActiveNewTodo,
+  refetch,
+}) => {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [dueDateTime, setDueDateTime] = useState<Date | ''>('')
@@ -37,6 +42,7 @@ const NewTodo: React.FC<Props> = ({ isActiveNewTodo, setIsActiveNewTodo }) => {
   const [updateTodo] = useMutation(ADD_TODO_MUTATION, {
     onCompleted: () => {
       clear()
+      refetch()
     },
     onError: (error) => {
       console.error(error)
