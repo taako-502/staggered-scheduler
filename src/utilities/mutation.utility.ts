@@ -26,6 +26,26 @@ export const ADMIN_LOGIN_MUTATION = gql`
   }
 `
 
+export const ADD_TODO_MUTATION = gql`
+  mutation CreateTodo(
+    $title: String!
+    $description: String!
+    $dueDateTimeGMT: String!
+    $uuid: String!
+  ) {
+    createTodo(
+      input: {
+        title: $title
+        description: $description
+        dueDateTime: $dueDateTimeGMT
+        userId: $uuid
+      }
+    ) {
+      id
+    }
+  }
+`
+
 export const UPDATE_TODO_STATUS_MUTATION = gql`
   mutation UpdateTodoStatus($id: ID!, $status: String!) {
     updateTodoStatus(id: $id, status: $status) {

@@ -8,7 +8,7 @@ type Props = {
 }
 
 const TodoCheckbox: React.FC<Props> = ({ id, done, updateTodoInList }) => {
-  const [updateTodo, { error }] = useMutation(UPDATE_TODO_DONE_MUTATION, {
+  const [updateTodoDone, { error }] = useMutation(UPDATE_TODO_DONE_MUTATION, {
     onCompleted: (data) => {
       // FIXME: おそらく正常に動作していない
       updateTodoInList(id)
@@ -19,8 +19,7 @@ const TodoCheckbox: React.FC<Props> = ({ id, done, updateTodoInList }) => {
   })
 
   const handleChangeDone = () => {
-    console.log('hogehoge')
-    updateTodo({ variables: { id, done: !done } })
+    updateTodoDone({ variables: { id, done: !done } })
   }
 
   return <input type="checkbox" checked={done} onChange={handleChangeDone} />

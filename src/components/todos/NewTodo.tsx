@@ -1,4 +1,3 @@
-import useAxios from '@/hooks/useAxios'
 import {
   ContoryCodeType,
   convertToGMT,
@@ -12,6 +11,8 @@ import TodoDescriptionText from '../inputs/text/TodoDescriptionText'
 import DueDateTime from '../inputs/DueDateTime'
 import TodoAddButton from '../inputs/buttons/TodoAddButton'
 import AddTodoTimezoonSelect from '../inputs/select/AddTodoTimezoonSelect'
+import { useMutation } from '@apollo/client'
+import { ADD_TODO_MUTATION } from '@/utilities/mutation.utility'
 
 type Props = {
   isActiveNewTodo: boolean
@@ -30,7 +31,6 @@ const NewTodo: React.FC<Props> = ({
   const [contoryCd, setContoryCd] = useState<ContoryCodeType>('')
   const [uuid, setUuid] = useState('')
   const [error, setError] = useState('')
-  const axios = useAxios()
 
   useEffect(() => {
     const uuid = localStorage.getItem('uuid')
@@ -39,9 +39,20 @@ const NewTodo: React.FC<Props> = ({
     }
   }, [])
 
+  const [updateTodo] = useMutation(ADD_TODO_MUTATION, {
+    onCompleted: () => {
+      clear()
+      updateTodoInList(uuid)
+    },
+    onError: (error) => {
+      console.error(error)
+      setError(error.message)
+    },
+  })
+
   if (!isActiveNewTodo) return
 
-  const newTodo = async () => {
+  const handleAddTodo = () => {
     if (!title) {
       setError('titleは必須です')
       return
@@ -51,25 +62,7 @@ const NewTodo: React.FC<Props> = ({
     const dueDateTimeGMT = dueDateTime
       ? subtractHoursFromDate(convertToGMT(dueDateTime), timeDifference)
       : ''
-    const query = `
-      mutation {
-        createTodo(input: {
-          title: "${title}"
-          description: "${description}"
-          dueDateTime: "${dueDateTimeGMT}"
-          userId: "${uuid}"
-        }) {
-          id
-        }
-      }
-    `
-    try {
-      await axios.post('/query', { query })
-      clear()
-      updateTodoInList(uuid)
-    } catch {
-      console.error('error')
-    }
+    updateTodo({ variables: { title, description, dueDateTimeGMT, uuid } })
   }
 
   const clear = () => {
@@ -102,7 +95,7 @@ const NewTodo: React.FC<Props> = ({
         />
       </div>
       <div className="text-right">
-        <TodoAddButton handler={newTodo} />
+        <TodoAddButton handler={handleAddTodo} />
       </div>
       {error && <ErrorMessage message={error} />}
     </div>
