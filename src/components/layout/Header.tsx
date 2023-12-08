@@ -3,14 +3,15 @@ import Image from 'next/image'
 import { useQuery } from '@apollo/client'
 import { useContext, useEffect, useState } from 'react'
 import { UserContext } from '@/contexts/UserContext'
-import { signout } from '@/utilities/signout.utility'
 import { GET_USER_BY_ID_QUERY } from '@/utilities/query.utility'
 import ErrorMessage from '../ErrorMessage'
 import { User } from '@/types/user.type'
+import { useRouter } from 'next/router'
 
 const Header = () => {
   const { user, setUser } = useContext(UserContext)
   const [uuid, setUuid] = useState('')
+  const route = useRouter()
 
   useEffect(() => {
     setUuid(localStorage.getItem('uuid') ?? '')
@@ -36,6 +37,11 @@ const Header = () => {
 
   if (loading) return <p>Loading...</p>
   if (error) return <ErrorMessage message="Error loading user" />
+
+  const signout = () => {
+    localStorage.removeItem('uuid')
+    route.push('/')
+  }
 
   return (
     <div>

@@ -4,6 +4,7 @@ import { GET_USERS_QUERY, IS_ADMIN_QUERY } from '@/utilities/query.utility'
 import { useQuery } from '@apollo/client'
 import { useEffect, useState } from 'react'
 
+// FIXME:　管理者ユーザーのみアクセスできるようにする
 const Users = () => {
   const [error, setError] = useState<string>('')
   const [uuid, setUuid] = useState(null)
