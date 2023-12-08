@@ -14,13 +14,16 @@ import TodoAddButton from '../inputs/buttons/TodoAddButton'
 import AddTodoTimezoonSelect from '../inputs/select/AddTodoTimezoonSelect'
 
 type Props = {
-  displayTimezoon: string
   isActiveNewTodo: boolean
   setIsActiveNewTodo: (isActiveNewTodo: boolean) => void
   updateTodoInList: (uuid: string) => {}
 }
 
-const NewTodo = (props: Props) => {
+const NewTodo: React.FC<Props> = ({
+  isActiveNewTodo,
+  setIsActiveNewTodo,
+  updateTodoInList,
+}) => {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [dueDateTime, setDueDateTime] = useState<Date | ''>('')
@@ -36,7 +39,7 @@ const NewTodo = (props: Props) => {
     }
   }, [])
 
-  if (!props.isActiveNewTodo) return
+  if (!isActiveNewTodo) return
 
   const newTodo = async () => {
     if (!title) {
@@ -62,15 +65,19 @@ const NewTodo = (props: Props) => {
     `
     try {
       await axios.post('/query', { query })
-      setTitle('')
-      setDescription('')
-      setDueDateTime('')
-      setError('')
-      props.updateTodoInList(uuid)
-      props.setIsActiveNewTodo(false)
+      clear()
+      updateTodoInList(uuid)
     } catch {
       console.error('error')
     }
+  }
+
+  const clear = () => {
+    setTitle('')
+    setDescription('')
+    setDueDateTime('')
+    setError('')
+    setIsActiveNewTodo(false)
   }
 
   return (

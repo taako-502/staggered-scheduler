@@ -82,7 +82,6 @@ const TodoList = (props: Props) => {
           })}
       </ul>
       <NewTodo
-        displayTimezoon={displayTimezoon}
         isActiveNewTodo={props.isActiveNewTodo}
         setIsActiveNewTodo={props.setIsActiveNewTodo}
         updateTodoInList={getTodosByUserId}
