@@ -1,9 +1,12 @@
-import { Todo, createTodoFromGraphQLData } from '@/types/todo.type'
+import { createTodoFromGraphQLData } from '@/types/todo.type'
 import NewTodo from './NewTodo'
-import useAxios from '@/hooks/useAxios'
 import { useEffect, useState } from 'react'
 import TodoItem from './TodoItem'
 import { ContoryCodeType } from '@/utilities/time.utility'
+import TimezoonSelect from '../inputs/select/TimezoonSelect'
+import ShowDoneCheckbox from '../inputs/ShowDoneCheckbox'
+import { useQuery } from '@apollo/client'
+import { TODOS_BY_USER_ID_QUERY } from '@/utilities/query.utility'
 
 type Props = {
   isActiveNewTodo: boolean
@@ -13,60 +16,34 @@ type Props = {
 const TodoList = (props: Props) => {
   const [displayDone, setDisplayDone] = useState<boolean>(false)
   const [displayTimezoon, setDisplayTimezoon] = useState<ContoryCodeType>('')
-  const [todos, setTodos] = useState<Todo[]>([])
-  const axios = useAxios()
-
-  async function getTodosByUserId(uuid: string) {
-    const query = `
-      query {
-        todosByUserId(userId: "${uuid}"){
-          id
-          title
-          description
-          done
-          dueDateTime
-          status
-          createdAt
-          updatedAt
-        }
-      }
-    `
-    try {
-      const result = await axios.post('/query', { query })
-      const todos = result.data.data.todosByUserId
-      const convertedTodos = createTodoFromGraphQLData(todos)
-      setTodos(convertedTodos)
-    } catch (error) {
-      console.error(error)
-    }
-  }
+  const [uuid, setUuid] = useState<string>('')
 
   useEffect(() => {
-    const currentUuid = localStorage.getItem('uuid')
-    if (!currentUuid) return
+    setUuid(localStorage.getItem('uuid'))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [uuid])
 
-    getTodosByUserId(currentUuid)
+  const { data, loading, error, refetch } = useQuery(TODOS_BY_USER_ID_QUERY, {
+    variables: { userId: uuid },
+    skip: !uuid,
   })
+
+  const refetchHandler = () => {
+    refetch()
+  }
+
+  const todos = data ? createTodoFromGraphQLData(data.todosByUserId) : []
+
+  if (loading) return <p>Loading...</p>
+  if (error) return <p>Error: {error.message}</p>
 
   return (
     <div>
-      <label htmlFor="show-timezoon">Display Timezoon</label>
-      <select
-        id="show-timezoon"
-        value={displayTimezoon}
-        onChange={(e) => setDisplayTimezoon(e.target.value as ContoryCodeType)}
-        className="bg-black"
-      >
-        <option value="gmt">GMT</option>
-        <option value="asia-tokyo">Asia/Tokyo</option>
-        <option value="africa-cairo">Africa/Cairo</option>
-      </select>
-      <input
-        id="show-done"
-        type="checkbox"
-        onChange={(e) => setDisplayDone(e.target.checked)}
+      <TimezoonSelect
+        displayTimezoon={displayTimezoon}
+        setDisplayTimezoon={setDisplayTimezoon}
       />
-      <label htmlFor="show-done">Display Closed Schedules</label>
+      <ShowDoneCheckbox setDisplayDone={setDisplayDone} />
       <ul>
         {todos
           .sort((a, b) => {
@@ -82,16 +59,14 @@ const TodoList = (props: Props) => {
                 key={todo.id}
                 todo={todo}
                 displayTimezoon={displayTimezoon}
-                updateTodoInList={getTodosByUserId}
               />
             )
           })}
       </ul>
       <NewTodo
-        displayTimezoon={displayTimezoon}
         isActiveNewTodo={props.isActiveNewTodo}
         setIsActiveNewTodo={props.setIsActiveNewTodo}
-        updateTodoInList={getTodosByUserId}
+        refetch={refetchHandler}
       />
     </div>
   )

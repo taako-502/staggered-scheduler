@@ -1,35 +1,47 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { signout } from '@/utilities/signout.utility'
-import { useContext, useEffect } from 'react'
+import { useQuery } from '@apollo/client'
+import { useContext, useEffect, useState } from 'react'
 import { UserContext } from '@/contexts/UserContext'
-import useAxios from '@/hooks/useAxios'
+import { GET_USER_BY_ID_QUERY } from '@/utilities/query.utility'
+import ErrorMessage from '../ErrorMessage'
+import { User } from '@/types/user.type'
+import { useRouter } from 'next/router'
 
 const Header = () => {
   const { user, setUser } = useContext(UserContext)
-  const axios = useAxios()
+  const [uuid, setUuid] = useState('')
+  const route = useRouter()
 
   useEffect(() => {
-    const currentUuid = localStorage.getItem('uuid') ?? ''
-    if (!currentUuid) return
-
-    async function getUsername(uuid: string) {
-      const query = `
-      query {
-        userById(id: "${uuid}") {
-          username
-        }
-      }`
-      try {
-        const result = await axios.post('/query', { query })
-        const user = result.data.data.userById
-        setUser(user)
-      } catch (error) {
-        console.error(error)
-      }
+    setUuid(localStorage.getItem('uuid') ?? '')
+    if (uuid) {
+      setUser({ ...user, id: uuid })
     }
-    getUsername(currentUuid)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [uuid])
+
+  const { data, loading, error } = useQuery(GET_USER_BY_ID_QUERY, {
+    variables: { id: user?.id },
+    skip: !user?.id, // クエリをスキップする条件
+    onCompleted: (data) => {
+      const user: User = {
+        username: data.userById.username,
+      }
+      setUser(user)
+    },
+    onError: (error) => {
+      console.error('header', error)
+    },
   })
+
+  if (loading) return <p>Loading...</p>
+  if (error) return <ErrorMessage message="Error loading user" />
+
+  const signout = () => {
+    localStorage.removeItem('uuid')
+    route.push('/')
+  }
 
   return (
     <div>

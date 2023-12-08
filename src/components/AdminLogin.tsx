@@ -1,105 +1,60 @@
 import { useState } from 'react'
-import useAxios from '@/hooks/useAxios'
 import { useRouter } from 'next/router'
+import ErrorMessage from './ErrorMessage'
+import { useMutation } from '@apollo/client'
+import { ADMIN_LOGIN_MUTATION } from '@/utilities/mutation.utility'
+import PasswordText from './inputs/text/PasswordText'
+import UsernameText from './inputs/text/UsernameText'
+import LoginButton from './inputs/buttons/LoginButton'
 
 type Props = {
   className: string
 }
 
-const AdminLogin = (props: Props) => {
+const AdminLogin: React.FC<Props> = ({ className }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
-  const axios = useAxios()
   const router = useRouter()
 
-  const signin = async () => {
-    try {
-      const result = await axios.post('/query', {
-        query: `
-          mutation login {
-            login(username: "${username}", password: "${password}") {
-              id
-              isAdmin
-            }
-          }
-        `,
-        variables: {
-          username,
-          password,
-        },
-      })
-      // エラーがあればエラーをセット
-      if (
-        result.data.errors &&
-        result.data.errors[0].extensions &&
-        result.data.errors[0].extensions.status
-      ) {
-        setError(
-          `${result.data.errors[0].extensions.status}: ${result.data.errors[0].message}`,
-        )
+  const [signin, { loading }] = useMutation(ADMIN_LOGIN_MUTATION, {
+    onCompleted: (data) => {
+      const currentUuid = data.login.id
+      localStorage.setItem('uuid', currentUuid)
+      if (data.login.isAdmin) {
+        router.push('/admin/users')
       } else {
-        setError('')
-        const currentUuid = result.data.data.login.id
-        localStorage.setItem('uuid', currentUuid)
-        console.log(result)
-        if (result.data.data.login.isAdmin) {
-          router.push('/admin/users')
-        } else {
-          setError('You are not admin user.')
-        }
+        setError('You are not admin user.')
       }
-    } catch {
-      console.error(error)
-      setError(error)
+    },
+    onError: (apolloError) => {
+      setError(apolloError.message)
+    },
+  })
+
+  const handleSignin = async () => {
+    try {
+      await signin({ variables: { username, password } })
+    } catch (err) {
+      console.error(err)
+      // エラーメッセージの設定
+      setError(err.message)
     }
   }
 
   return (
-    <div className={props.className}>
+    <div className={className}>
       <div className="mx-auto max-w-[320px]">
         <div>
           <h1>Admin Login</h1>
-          <label
-            htmlFor="username"
-            className="mr-2 inline-block w-full max-w-[120px]"
-          >
-            Username
-          </label>
-          <input
-            id="username"
-            type="text"
-            className="text-black px-2 py-1"
-            placeholder="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
+          <UsernameText username={username} setUsername={setUsername} />
         </div>
         <div className="mt-2">
-          <label
-            htmlFor="password"
-            className="mr-2 inline-block w-full max-w-[120px]"
-          >
-            Password
-          </label>
-          <input
-            id="password"
-            type="password"
-            className="text-black px-2 py-1"
-            placeholder="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <PasswordText password={password} setPassword={setPassword} />
         </div>
       </div>
-      <button
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold rounded block mx-auto mt-2"
-        type="button"
-        onClick={signin}
-      >
-        Login
-      </button>
-      <p className="text-red-500">{error}</p>
+      <LoginButton handler={handleSignin} loading={loading} />
+      <ErrorMessage message={error} />
     </div>
   )
 }

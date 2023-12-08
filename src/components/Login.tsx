@@ -1,8 +1,14 @@
 import { useContext, useState } from 'react'
 import { useRouter } from 'next/router'
-import useAxios from '@/hooks/useAxios'
-import { User } from '@/types/user.type'
+import { User, isGraphQLUser } from '@/types/user.type'
 import { UserContext } from '@/contexts/UserContext'
+import { LOGIN_MUTATION } from '@/utilities/mutation.utility'
+import { useMutation } from '@apollo/client'
+import { isGqlErrorResponse } from '@/types/errors.type'
+import ErrorMessage from './ErrorMessage'
+import PasswordText from './inputs/text/PasswordText'
+import UsernameText from './inputs/text/UsernameText'
+import LoginButton from './inputs/buttons/LoginButton'
 
 type Props = {
   className: string
@@ -12,44 +18,36 @@ const Login = (props: Props) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
-  const axios = useAxios()
   const router = useRouter()
   const { setUser } = useContext(UserContext)
 
-  const signin = async () => {
-    try {
-      const result = await axios.post('/query', {
-        query: `
-          mutation login {
-            login(username: "${username}", password: "${password}") {
-              id
-              username
-            }
-          }
-        `,
-        variables: {
-          username,
-          password,
-        },
-      })
-      // エラーがあればエラーをセット
-      if (
-        result.data.errors &&
-        result.data.errors[0].extensions &&
-        result.data.errors[0].extensions.status
-      ) {
-        setError(
-          `${result.data.errors[0].extensions.status}: ${result.data.errors[0].message}`,
-        )
-      } else {
-        setError('')
-        const user: User = result.data.data.login
+  const [signin, { loading }] = useMutation(LOGIN_MUTATION, {
+    variables: { username, password },
+    onCompleted: (data) => {
+      const login = data.login
+      console.log(login)
+      if (isGraphQLUser(login)) {
+        const user: User = login
         localStorage.setItem('uuid', user.id)
         setUser(user)
         router.push('/')
+      } else if (isGqlErrorResponse(login)) {
+        console.error('Login error:', login)
+        setError(login.errors[0].message)
+      } else {
+        console.error('Login error:', login)
       }
-    } catch {
-      console.error(error)
+    },
+    onError: (error) => {
+      setError(error.message)
+    },
+  })
+
+  const handleSignin = async () => {
+    try {
+      await signin()
+    } catch (error) {
+      console.error('Login error:', error)
       setError(error)
     }
   }
@@ -59,46 +57,14 @@ const Login = (props: Props) => {
       <div className="mx-auto max-w-[320px]">
         <div>
           <h1>Login</h1>
-          <label
-            htmlFor="username"
-            className="mr-2 inline-block w-full max-w-[120px]"
-          >
-            Username
-          </label>
-          <input
-            id="username"
-            type="text"
-            className="text-black px-2 py-1"
-            placeholder="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
+          <UsernameText username={username} setUsername={setUsername} />
         </div>
         <div className="mt-2">
-          <label
-            htmlFor="password"
-            className="mr-2 inline-block w-full max-w-[120px]"
-          >
-            Password
-          </label>
-          <input
-            id="password"
-            type="password"
-            className="text-black px-2 py-1"
-            placeholder="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <PasswordText password={password} setPassword={setPassword} />
         </div>
       </div>
-      <button
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold rounded block mx-auto mt-2"
-        type="button"
-        onClick={signin}
-      >
-        Login
-      </button>
-      <p className="text-red-500">{error}</p>
+      <LoginButton handler={handleSignin} loading={loading} />
+      <ErrorMessage message={error} />
     </div>
   )
 }

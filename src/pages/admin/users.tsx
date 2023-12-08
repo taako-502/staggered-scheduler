@@ -1,56 +1,39 @@
-import useAxios from '@/hooks/useAxios'
+import ErrorMessage from '@/components/ErrorMessage'
 import { User } from '@/types/user.type'
+import { GET_USERS_QUERY, IS_ADMIN_QUERY } from '@/utilities/query.utility'
+import { useQuery } from '@apollo/client'
 import { useEffect, useState } from 'react'
 
+// FIXME:　管理者ユーザーのみアクセスできるようにする
 const Users = () => {
-  const [users, setUsers] = useState<User[]>([])
   const [error, setError] = useState<string>('')
-  const axios = useAxios()
+  const [uuid, setUuid] = useState(null)
 
   useEffect(() => {
-    async function fetchUsers() {
-      // 管理者ユーザーかどうかを判定する
-      const uuid = localStorage.getItem('uuid')
-      const loginUser = await axios.post('/query', {
-        query: `
-          query {
-            userById(id: "${uuid}") {
-              id
-              isAdmin
-            }
-          }
-        `,
-      })
-      if (!loginUser.data.data.userById.isAdmin) {
-        setError('You are not admin user.')
-        return
-      }
-      // ユーザ情報の取得
-      const result = await axios.post('/query', {
-        query: `
-          query {
-            users {
-              id
-              username
-            }
-          }
-        `,
-      })
-      setUsers(result.data.data.users)
-    }
-    fetchUsers()
+    setUuid(localStorage.getItem('uuid'))
   }, [])
+
+  const { data: adminData } = useQuery(IS_ADMIN_QUERY, {
+    variables: { id: uuid },
+  })
+  const { data: usersData, loading: loadingUsers } = useQuery(GET_USERS_QUERY)
+
+  useEffect(() => {
+    if (adminData && !adminData.userById.isAdmin) {
+      setError('You are not admin user.')
+    }
+  }, [adminData])
+
+  if (loadingUsers) return <div>Loading...</div>
+  if (error) return <ErrorMessage message={error} />
 
   return (
     <div>
-      {error && <div color="text-red-600">{error}</div>}
-      {users.map((user) => {
-        return (
-          <div key={user.id}>
-            <div>{user.username}</div>
-          </div>
-        )
-      })}
+      {usersData.users.map((user: User) => (
+        <div key={user.id}>
+          <div>{user.username}</div>
+        </div>
+      ))}
     </div>
   )
 }
