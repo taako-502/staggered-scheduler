@@ -34,3 +34,12 @@ export const UPDATE_TODO_STATUS_MUTATION = gql`
     }
   }
 `
+
+export const UPDATE_TODO_DONE_MUTATION = gql`
+  mutation UpdateTodoDone($id: ID!, $done: Boolean!) {
+    updateTodoDone(id: $id, done: $done) {
+      id
+      done
+    }
+  }
+`
