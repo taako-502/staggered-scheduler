@@ -7,7 +7,7 @@ export default function Document() {
       <Head>
         <link rel="shortcut icon" href="/favicon.ico" />
       </Head>
-      <body className="py-14">
+      <body>
         <Main />
         <NextScript />
         <Analytics />

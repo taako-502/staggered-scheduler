@@ -1,6 +1,5 @@
 import Introduction from '@/components/Introduction'
 import TodoList from '@/components/todos/TodoList'
-import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 export default function Home() {
@@ -20,7 +19,7 @@ export default function Home() {
   if (!uuid) return <Introduction />
 
   return (
-    <main>
+    <>
       <TodoList
         isActiveNewTodo={isActiveNewTodo}
         setIsActiveNewTodo={setIsActiveNewTodo}
@@ -32,6 +31,6 @@ export default function Home() {
       >
         New Schedule
       </button>
-    </main>
+    </>
   )
 }

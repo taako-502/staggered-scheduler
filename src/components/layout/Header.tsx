@@ -45,19 +45,19 @@ const Header = () => {
   }
 
   return (
-    <div>
+    <header className="pt-12">
       <div className="max-w-screen-md mx-auto grid grid-cols-2">
         <Link href="/">
           <Image src="/logo.png" alt="logo" width={300} height={30} priority />
         </Link>
-        <div className="text-right">
+        <div className="text-right pt-3">
           <span className="mr-4">{user.username}</span>
           <button onClick={signout} className="relative z-40">
             SignOut
           </button>
         </div>
       </div>
-    </div>
+    </header>
   )
 }
 
