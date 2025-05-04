@@ -48,7 +48,15 @@ const Header = () => {
     <header className="pt-12">
       <div className="max-w-screen-md mx-auto grid grid-cols-2">
         <Link href="/">
-          <Image src="/logo.png" alt="logo" width={300} height={30} priority />
+          <div className="relative w-[300px] h-[30px]">
+            <Image
+              src="/logo.png"
+              alt="logo"
+              fill
+              priority
+              className="object-contain"
+            />
+          </div>
         </Link>
         <div className="text-right pt-3">
           <span className="mr-4">{user.username}</span>
